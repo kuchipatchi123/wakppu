@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100년 만의 왁뿌볼 영접</title>
+    <style>
+        /* 공통 스타일: Y2K 파란색 감성 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0000FF;
+            color: #FFFFFF;
+            font-family: "돋움", dotum, sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 1. 랜딩 페이지 (시작 화면) */
+        #landing-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0000FF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        #start-btn {
+            padding: 20px 40px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #0000FF;
+            background-color: #C0C0C0; /* 옛날 회색 버튼 */
+            border: 4px outset #FFFFFF;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px #000000;
+        }
+
+        #start-btn:active {
+            border: 4px inset #FFFFFF;
+        }
+
+        #start-btn:hover {
+            background-color: #FFFF00;
+        }
+
+        /* 2. 메인 컨텐츠 영역 (숨겨져 있음) */
+        #main-content {
+            display: none; /* 시작 버튼 누르기 전엔 안 보임 */
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            border-bottom: 2px solid white;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #000;
+        }
+
+        #sub-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        #video-container {
+            position: relative;
+            width: 80vw;
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border: 4px solid #FFFFFF;
+            box-shadow: 10px 10px 0px #000080;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 60px;
+            cursor: pointer;
+            text-shadow: 3px 3px #000;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .arrow:hover { color: #FFFF00; }
+        #prev { left: -70px; }
+        #next { right: -70px; }
+
+        #waxpu-name {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            background-color: #FFFFFF;
+            color: #0000FF;
+            padding: 10px 30px;
+            border: 2px inset #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="landing-page">
+        <h1 style="margin-bottom: 40px;">100년을 기다린 왁뿌볼...</h1>
+        <button id="start-btn" onclick="startEncounter()">영접 시작하기</button>
+    </div>
+
+    <div id="main-content">
+        <h1>*** 왁뿌볼 영접의 공간 ***</h1>
+        <div id="sub-text">화살표를 눌러 100년의 한을 푸세요...</div>
+
+        <div id="video-container">
+            <button id="prev" class="arrow" onclick="changeVideo(-1)">◀</button>
+            
+            <video id="waxpu-video" loop>
+                <source id="video-source" src="buldak.MP4" type="video/mp4">
+            </video>
+
+            <button id="next" class="arrow" onclick="changeVideo(1)">▶</button>
+        </div>
+
+        <div id="waxpu-name">불닭 왁뿌볼</div>
+    </div>
+
+    <script>
+        const waxpuData = [
+            { file: "buldak.mov", name: "불닭 왁뿌볼" },
+            { file: "mala.mov", name: "마라 왁뿌볼" },
+            { file: "fire.mov", name: "불 왁뿌볼" },
+            { file: "baby.MP4", name: "애기볼 왁뿌볼" },
+            { file: "tanghulu.mov", name: "탕후루 왁뿌볼" },
+            { file: "fur.mov", name: "털 왁뿌볼" },
+            { file: "pigeon.mov", name: "비둘기 왁뿌볼" }
+        ];
+        
+        let currentIndex = 0;
+        const videoElement = document.getElementById("waxpu-video");
+        const sourceElement = document.getElementById("video-source");
+        const nameElement = document.getElementById("waxpu-name");
+        const landingPage = document.getElementById("landing-page");
+        const mainContent = document.getElementById("main-content");
+
+        // [핵심] 버튼을 누를 때 실행되는 함수
+        function startEncounter() {
+            landingPage.style.display = "none"; // 랜딩 페이지 숨기기
+            mainContent.style.display = "flex"; // 메인 화면 보이기
+            
+            videoElement.play(); // 영상 재생 시작 (소리 포함)
+        }
+
+        function changeVideo(direction) {
+            currentIndex += direction;
+
+            if (currentIndex < 0) currentIndex = waxpuData.length - 1;
+            if (currentIndex >= waxpuData.length) currentIndex = 0;
+
+            const currentWaxpu = waxpuData[currentIndex];
+            
+            sourceElement.src = currentWaxpu.file;
+            nameElement.innerText = currentWaxpu.name;
+            
+            videoElement.load();
+            videoElement.play();
+        }
+    </script>
+</body>
+</html>
