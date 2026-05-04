@@ -164,26 +164,36 @@
 
         // [핵심] 버튼을 누를 때 실행되는 함수
         function startEncounter() {
-            landingPage.style.display = "none"; // 랜딩 페이지 숨기기
-            mainContent.style.display = "flex"; // 메인 화면 보이기
-            
-            videoElement.play(); // 영상 재생 시작 (소리 포함)
-        }
-
-        function changeVideo(direction) {
-            currentIndex += direction;
-
-            if (currentIndex < 0) currentIndex = waxpuData.length - 1;
-            if (currentIndex >= waxpuData.length) currentIndex = 0;
-
-            const currentWaxpu = waxpuData[currentIndex];
-            
-            sourceElement.src = currentWaxpu.file;
-            nameElement.innerText = currentWaxpu.name;
-            
-            videoElement.load();
+        // 1. 화면 전환
+        landingPage.style.display = "none";
+        mainContent.style.display = "flex";
+        
+        // 2. 첫 번째 영상(불닭) 소스를 명확하게 다시 세팅
+        const firstWaxpu = waxpuData[0];
+        sourceElement.src = firstWaxpu.file;
+        nameElement.innerText = firstWaxpu.name;
+        
+        // 3. 영상 강제 로드 및 재생
+        videoElement.load(); // 새로 고침해서 소스를 불러옴
+        
+        // 브라우저가 영상을 재생할 준비가 되면 바로 실행
+        videoElement.oncanplay = function() {
             videoElement.play();
-        }
-    </script>
-</body>
-</html>
+        };
+    }
+
+    function changeVideo(direction) {
+        currentIndex += direction;
+
+        if (currentIndex < 0) currentIndex = waxpuData.length - 1;
+        if (currentIndex >= waxpuData.length) currentIndex = 0;
+
+        const currentWaxpu = waxpuData[currentIndex];
+        
+        sourceElement.src = currentWaxpu.file;
+        nameElement.innerText = currentWaxpu.name;
+        
+        videoElement.load();
+        videoElement.play();
+    }
+</script>
